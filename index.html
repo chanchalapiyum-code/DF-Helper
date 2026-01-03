@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Site - Professional</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f6f8;
+    color:#000;
+}
+body.dark{
+    background:#0f172a;
+    color:#fff;
+}
+
+/* --- Improved Super Search Bar --- */
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 2000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.dark .top-nav {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.nav-settings-icon {
+    font-size: 26px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    background: #f1f5f9;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark .nav-settings-icon {
+    background: #1e293b;
+}
+
+.nav-settings-icon:hover {
+    transform: rotate(90deg);
+    background: #3b82f6;
+    color: white;
+}
+
+.search-wrapper {
+    flex: 1;
+    max-width: 500px;
+    position: relative;
+    margin: 0 20px;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 2px solid #e2e8f0;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #f8fafc;
+}
+
+.dark .search-wrapper input {
+    background: #1e293b;
+    color: white;
+    border-color: #334155;
+}
+
+.search-wrapper input:focus {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    transform: scale(1.02);
+}
+
+.dark .search-wrapper input:focus {
+    background: #0f172a;
+}
+
+.nav-spacer {
+    width: 42px; 
+}
+
+/* --- Layout adjustments --- */
+.page{
+    display:none;
+    height:100vh;
+    width:100%;
+    position:relative;
+    text-align:center;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    overflow-y: auto;
+    padding-top: 80px; 
+    box-sizing: border-box;
+}
+.page.active{ display:flex; }
+
+#pageWelcome {
+    padding-top: 0;
+    background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #1e1b4b);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    color: white;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.welcome-si {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+    background: linear-gradient(to bottom, #ffffff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+    animation: fadeInDown 1.2s ease;
+}
+
+.welcome-en {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    opacity: 0.8;
+    animation: fadeInUp 1.5s ease;
+}
+
+#goBtn {
+    padding: 20px 80px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #ff3d3d, #c1121f);
+    color: #fff;
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0 10px 30px rgba(255, 61, 61, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeInUp 1.2s ease, pulse 2s infinite 1.5s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+}
+
+#goBtn span {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-transform: none;
+}
+
+#goBtn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 61, 61, 0.6);
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 61, 61, 0.7); }
+    70% { box-shadow: 0 0 0 20px rgba(255, 61, 61, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 61, 61, 0); }
+}
+
+h1{ margin-top: 20px; margin-bottom:20px; }
+
+.mode-buttons{
+    display:flex;
+    gap:15px;
+    width: 320px;
+    justify-content: center;
+}
+.mode-btn{
+    flex: 1;
+    padding: 22px 0;
+    border:none;
+    border-radius:14px;
+    font-size: 20px;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.warfare{ background:linear-gradient(135deg,#22c55e,#15803d); }
+.operation{ background:linear-gradient(135deg,#38bdf8,#2563eb); }
+
+#newGame{
+    margin-top:20px;
+    padding:16px 45px;
+    background:linear-gradient(135deg,#fde047,#f59e0b);
+    border:none;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+    width: 320px;
+}
+
+.main-home-icon {
+    font-size: 40px;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.settings-list{
+    font-size:22px;
+    text-align:left;
+}
+.settings-list li{
+    margin:18px 0;
+    cursor:pointer;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.link-btn{
+    padding:18px 45px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,#ff0050,#000000);
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    margin:12px 0;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+}
+.whatsapp{ background:linear-gradient(135deg,#25D366,#128C7E); }
+
+.theme-btn{
+    padding:16px 45px;
+    margin:15px;
+    border:none;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+}
+.light{ background:#e5e7eb; }
+.dark{ background:#1f2933; color:#fff; }
+
+.back{
+    margin: 20px 0;
+    padding:8px 25px;
+    background:linear-gradient(135deg,#ff3d3d,#b91c1c);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    box-shadow:0 6px 12px rgba(0,0,0,0.5);
+}
+
+.about-text, .updates-text{
+    padding:20px;
+    font-size:18px;
+    line-height:1.6;
+    max-width:600px;
+    text-align:center;
+}
+
+.wf-gun-btn{
+    padding:18px 45px;
+    margin:8px 0;
+    border:none;
+    border-radius:12px;
+    font-size:18px;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    background:linear-gradient(135deg,#f59e0b,#facc15);
+    width:250px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+}
+
+.stats-container {
+    width: 90%;
+    max-width: 550px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+.dark .stats-container { 
+    background: #1e293b; 
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.gun-card {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 12px;
+    transition: transform 0.2s;
+}
+.gun-card:hover { transform: translateX(5px); }
+
+.smg-card { border-left: 6px solid #fbbf24; background: rgba(251, 191, 36, 0.05); }
+.rifle-card { border-left: 6px solid #ef4444; background: rgba(239, 68, 68, 0.05); }
+.lmg-card { border-left: 6px solid #10b981; background: rgba(16, 185, 129, 0.05); }
+.mr-card { border-left: 6px solid #8b5cf6; background: rgba(139, 92, 246, 0.05); }
+.sr-card { border-left: 6px solid #3b82f6; background: rgba(59, 130, 246, 0.05); }
+.sg-card { border-left: 6px solid #f97316; background: rgba(249, 115, 22, 0.05); }
+.pistol-card { border-left: 6px solid #64748b; background: rgba(100, 116, 139, 0.05); }
+
+.gun-card h3 { 
+    margin: 0 0 10px 0; 
+    font-size: 20px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.smg-card h3 { color: #d97706; }
+.rifle-card h3 { color: #dc2626; }
+.lmg-card h3 { color: #059669; }
+.mr-card h3 { color: #7c3aed; }
+.sr-card h3 { color: #2563eb; }
+.sg-card h3 { color: #ea580c; }
+.pistol-card h3 { color: #475569; }
+
+.dark .gun-card h3 { color: #f8fafc; }
+
+.gun-card p { 
+    font-size: 15px; 
+    line-height: 1.5;
+    margin: 5px 0; 
+    color: #475569; 
+}
+.dark .gun-card p { color: #94a3b8; }
+
+.pro-tip { 
+    background: #f1f5f9; 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    border: 1px dashed #cbd5e1;
+}
+.dark .pro-tip { 
+    background: rgba(0,0,0,0.2); 
+    color: #e2e8f0;
+    border-color: rgba(255,255,255,0.1);
+}
+
+.pro-tip b { color: #22c55e; }
+
+.option-btn{
+    padding:20px 50px;
+    margin:15px;
+    border:none;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+}
+.guncode{ background:linear-gradient(135deg,#f59e0b,#facc15); }
+
+.op-gun-btn{
+    padding:18px 50px;
+    margin:15px;
+    border:none;
+    border-radius:12px;
+    font-size:20px;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(0,0,0,0.5);
+}
+.lowbudget{ background:#22c55e; }
+.highperf{ background:#ef4444; }
+
+.page.active .option-btn, .page.active .wf-gun-btn, .page.active .awm-btn, .page.active .m7-btn, .page.active .lb-gun-btn{
+    transform: scale(0);
+    animation: popup 0.3s forwards ease;
+}
+@keyframes popup{ to{ transform: scale(1); } }
+button:active{ transform: scale(0.95); }
+
+.awm-btn, .m7-btn, .lb-gun-btn {
+    padding: 18px 50px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6366f1, #4338ca);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+    width: 280px;
+    margin-bottom: 12px;
+}
+
+.code-display {
+    background: rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    font-family: monospace;
+    font-size: 20px;
+    word-break: break-all;
+    border: 2px dashed #6366f1;
+    margin: 20px;
+}
+.dark .code-display { background: rgba(255,255,255,0.05); }
+
+.operator-card {
+    border-left: 6px solid #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+}
+.operator-card h3 { color: #2563eb; margin: 0; }
+.dark .operator-card h3 { color: #60a5fa; }
+.skill-item { margin: 10px 0; font-size: 15px; }
+.skill-name { font-weight: bold; color: #ef4444; }
+
+</style>
+</head>
+
+<body>
+
+<div class="top-nav" id="topNav" style="display:none;">
+    <div class="nav-settings-icon" id="openSettings" title="Settings">⚙️</div>
+    <div class="search-wrapper">
+        <input type="text" id="gunSearch" placeholder="Search for your favorite gun..." onkeypress="handleSearch(event)">
+    </div>
+    <div class="nav-spacer"></div>
+</div>
+
+<div class="page active" id="pageWelcome">
+    <div class="welcome-si">ආයුබෝවන්</div>
+    <div class="welcome-en">WELCOME</div>
+    <button id="goBtn">
+        GO
+        <span>ඇතුල් වන්න</span>
+    </button>
+</div>
+
+<div class="page" id="pageMode">
+    <div class="main-home-icon">🏠</div>
+    <h1>Select Mode</h1>
+
+    <div class="mode-buttons">
+        <button class="mode-btn warfare" id="btnWarfare">Warfare</button>
+        <button class="mode-btn operation" id="btnOperation">Operation</button>
+    </div>
+    
+    <button id="newGame">New game updates</button>
+    
+    <button id="operatorsBtn" style="margin-top:15px; padding:16px 45px; background:linear-gradient(135deg,#0ea5e9,#2563eb); border:none; border-radius:14px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 8px 18px rgba(0,0,0,0.5); color:white; width:320px;">Operators and skills</button>
+
+    <button id="topUp" style="margin-top:15px; padding:16px 45px; background:linear-gradient(135deg,#f472b6,#ec4899); border:none; border-radius:14px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 8px 18px rgba(0,0,0,0.5); color:white; width:320px;">Top up now</button>
+    
+    <button id="gunTipsBtn" style="margin-top:15px; padding:16px 45px; background:linear-gradient(135deg,#a855f7,#7e22ce); border:none; border-radius:14px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow:0 8px 18px rgba(0,0,0,0.5); color:white; width:320px;">Gun Stats & Tips</button>
+</div>
+
+<div class="page" id="pageOperators">
+    <h1>Operators & Skills</h1>
+    <div class="stats-container">
+        <div class="operator-card">
+            <h3>🐺 D-WOLF (Assault)</h3>
+            <p>වේගය සහ ප්‍රහාරාත්මක ශක්තිය අතින් ඉහළම ක්‍රීඩකයෙකි.</p>
+            <div class="skill-item"><span class="skill-name">Tactical:</span> Exoskeleton මගින් වේගය වැඩිකර ගනී.</div>
+            <div class="skill-item"><span class="skill-name">Ultimate:</span> ශක්තිමත් ආයුධයකින් වේගවත් ප්‍රහාර එල්ල කරයි.</div>
+        </div>
+        <div class="operator-card" style="border-color: #a855f7;">
+            <h3 style="color: #a855f7;">🏹 LUNA (Recon)</h3>
+            <p>සතුරන් සිටින ස්ථානය හඳුනා ගැනීමට ඉතා දක්ෂයි.</p>
+            <div class="skill-item"><span class="skill-name">Tactical:</span> Recon Arrow මගින් සතුරන් පෙන්වයි.</div>
+            <div class="skill-item"><span class="skill-name">Ultimate:</span> විදුලි හීයකින් සතුරන්ට හානි කර හඳුනා ගනී.</div>
+        </div>
+        <div class="operator-card" style="border-color: #22c55e;">
+            <h3 style="color: #22c55e;">💉 STINGER (Support)</h3>
+            <p>කණ්ඩායමේ සිටින අයගේ සෞඛ්‍ය තත්වය (Health) ආරක්ෂා කරයි.</p>
+            <div class="skill-item"><span class="skill-name">Tactical:</span> සගයන්ට මෙන්ම තමාටද Health ලබා දෙයි.</div>
+            <div class="skill-item"><span class="skill-name">Ultimate:</span> විශාල ප්‍රදේශයකට සුව කිරීමේ වායුවක් විහිදුවයි.</div>
+        </div>
+        <div class="operator-card" style="border-color: #f59e0b;">
+            <h3 style="color: #f59e0b;">🛡️ SHEPHERD (Engineer)</h3>
+            <p>ආරක්ෂක විධිවිධාන සැලසීම සඳහා විශේෂඥයෙකි.</p>
+            <div class="skill-item"><span class="skill-name">Tactical:</span> Sonic ක්ෂේත්‍රයක් සාදා සතුරන්ගේ වේගය අඩු කරයි.</div>
+            <div class="skill-item"><span class="skill-name">Ultimate:</span> Sonic පවුරක් මගින් කණ්ඩායම ආරක්ෂා කරයි.</div>
+        </div>
+    </div>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageGunTips">
+    <h1>Gun Stats & Pro Tips</h1>
+    <div class="stats-container">
+        <div class="gun-card smg-card">
+            <h3>⚡ 1. SMG (Submachine Gun)</h3>
+            <p><strong>භාවිතය:</strong> ඉතා වේගයෙන් වෙඩි තැබීමේ හැකියාව (High Fire Rate) ඇත. ළඟ සිටින සතුරන්ට පහර දීමට ඉතා සුදුසුයි.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> සතුරාට ඉතා සමීපව සිටින විට "Hip-fire" භාවිතා කරන්න. චලනය වන අතරතුර වෙඩි තැබීම වඩාත් සාර්ථකයි.</div>
+        </div>
+        <div class="gun-card rifle-card">
+            <h3>🎯 2. RIFLE (Assault Rifle)</h3>
+            <p><strong>භාවිතය:</strong> ඕනෑම දුරක සිටින සතුරෙකුට සාර්ථකව පහර දිය හැක. හානිය සහ ස්ථාවරත්වය අතර හොඳ සමබරතාවයක් පවතී.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> ඈත සිටින සතුරන්ට වෙඩි තැබීමේදී එක දිගට වෙඩි නොතබා "Burst fire" ක්‍රමය භාවිතා කරන්න.</div>
+        </div>
+        <div class="gun-card lmg-card">
+            <h3>🔥 3. LMG (Light Machine Gun)</h3>
+            <p><strong>භාවිතය:</strong> විශාල පිරිසකට එකවර බාධා කිරීමට සහ වාහන වලට හානි කිරීමට යොදා ගනී. උණ්ඩ විශාල ප්‍රමාණයක් පවතී.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> මෙහි බර වැඩි නිසා ඔබගේ වේගය අඩු වේ. එබැවින් ආරක්ෂිතව හිඳිමින් සතුරන් එන මාවත් අවහිර කරන්න.</div>
+        </div>
+        <div class="gun-card mr-card">
+            <h3>🔭 4. MR (Marksman Rifle)</h3>
+            <p><strong>භාවිතය:</strong> Sniper එකකට වඩා වේගවත් නමුත් Rifle එකකට වඩා බලවත්ය. මධ්‍යම සහ දිගු දුරට ඉතා සුදුසුයි.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> සතුරාගේ හිසට (Headshot) ඉලක්ක කිරීමට උත්සාහ කරන්න. සාමාන්‍යයෙන් වෙඩි 2කින් සතුරෙකු පරාජය කළ හැක.</div>
+        </div>
+        <div class="gun-card sr-card">
+            <h3>💀 5. SR (Sniper Rifle)</h3>
+            <p><strong>භාවිතය:</strong> ඉතා ඈත සිටින සතුරන් එක උණ්ඩයකින් (One-shot kill) පරාජය කිරීමට භාවිතා කරයි.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> නිතරම ඉලක්කය ලබා ගත් වහාම වෙඩි තබා ස්ථානය මාරු කරන්න. එකම තැන නොසිටින්න.</div>
+        </div>
+        <div class="gun-card sg-card">
+            <h3>💥 6. SHOTGUN</h3>
+            <p><strong>භාවිතය:</strong> ගොඩනැගිලි ඇතුළත (Indoor) සහ ඉතා ආසන්න සටන් සඳහා අංක එකේ තේරීමයි.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> පළමු වෙඩි මුරයෙන්ම සතුරා පරාජය කිරීමට උත්සාහ කරන්න. මගහැරුණහොත් නැවත Load වීමට කාලය ගත වේ.</div>
+        </div>
+        <div class="gun-card pistol-card">
+            <h3>🔫 7. PISTOL</h3>
+            <p><strong>භාවිතය:</strong> ඔබේ ප්‍රධාන අවියේ උණ්ඩ අවසන් වූ විට භාවිතා කළ හැකි හොඳම විකල්පයයි.</p>
+            <div class="pro-tip"><b>💡 Pro Tip:</b> Reload කිරීමට වඩා අවිය මාරු කිරීම (Switching to pistol) වේගවත් වේ. හදිසි අවස්ථා සඳහා භාවිතා කරන්න.</div>
+        </div>
+    </div>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageUpdates">
+    <h1>Game Updates</h1>
+    <div class="updates-text">මෙම විශේෂාංගය ඉදිරියේදී බලාපොරොත්තු වන්න.</div>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageWarfareOptions">
+    <h1>Warfare Options</h1>
+    <button class="option-btn guncode" id="wfGunCodeBtn">WF Gun Code</button>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageWFGunCode">
+    <h1>WF Gun Code Options</h1>
+    <button class="wf-gun-btn" id="wfRifleBtn">RIFLE</button>
+    <button class="wf-gun-btn" id="wfSMGBtn">SMG</button>
+    <button class="wf-gun-btn" id="wfShotgunBtn">SHOTGUN</button>
+    <button class="wf-gun-btn" id="wfLMGBtn">LMG</button>
+    <button class="wf-gun-btn" id="wfMRBtn">MR</button>
+    <button class="wf-gun-btn" id="wfSRBtn">SR</button>
+    <button class="wf-gun-btn" id="wfPistolBtn">PISTOL</button>
+    <button class="wf-gun-btn" id="wfSpecialBtn">SPECIAL</button>
+    <button class="back" onclick="showPage('pageWarfareOptions')">Back</button>
+</div>
+
+<div class="page" id="pageWFRifleGuns">
+    <h1>WF RIFLE Guns</h1>
+    <button class="wf-gun-btn">WF M4A1</button>
+    <button class="wf-gun-btn">WF M16A4</button>
+    <button class="wf-gun-btn">WF CAR-15</button>
+    <button class="wf-gun-btn">WF AK-12</button>
+    <button class="wf-gun-btn">WF KC-17</button>
+    <button class="wf-gun-btn">WF Scar-H</button>
+    <button class="wf-gun-btn">WF M7</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFSMGGuns">
+    <h1>WF SMG Guns</h1>
+    <button class="wf-gun-btn">WF VITYAZ</button>
+    <button class="wf-gun-btn">WF P90</button>
+    <button class="wf-gun-btn">WF MP7</button>
+    <button class="wf-gun-btn">WF VECTOR</button>
+    <button class="wf-gun-btn">WF MK4</button>
+    <button class="wf-gun-btn">WF MP5</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFSpecialGuns">
+    <h1>WF SPECIAL Guns</h1>
+    <button class="wf-gun-btn">WF Compound Bow</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFSRGuns">
+    <h1>WF SR Guns</h1>
+    <button class="wf-gun-btn">WF R93</button>
+    <button class="wf-gun-btn">WF SV98</button>
+    <button class="wf-gun-btn">WF M700</button>
+    <button class="wf-gun-btn">WF AWM</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFLMGGuns">
+    <h1>WF LMG Guns</h1>
+    <button class="wf-gun-btn">WF M249</button>
+    <button class="wf-gun-btn">WF QJB201</button>
+    <button class="wf-gun-btn">WF PKM</button>
+    <button class="wf-gun-btn">WF M250</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFShotgunGuns">
+    <h1>WF SHOTGUN Guns</h1>
+    <button class="wf-gun-btn">WF M870</button>
+    <button class="wf-gun-btn">WF M1014</button>
+    <button class="wf-gun-btn">WF 725 Double-Barrel</button>
+    <button class="wf-gun-btn">WF S12K</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFMRGuns">
+    <h1>WF MR Guns</h1>
+    <button class="wf-gun-btn">WF SR9</button>
+    <button class="wf-gun-btn">WF Mini-14</button>
+    <button class="wf-gun-btn">WF VSS</button>
+    <button class="wf-gun-btn">WF SKS</button>
+    <button class="wf-gun-btn" id="wfSVDBtn">WF SVD</button>
+    <button class="wf-gun-btn">WF SR-25</button>
+    <button class="wf-gun-btn">WF PSG-1</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageWFPistolGuns">
+    <h1>WF PISTOL Guns</h1>
+    <button class="wf-gun-btn">WF G18</button>
+    <button class="wf-gun-btn">WF G17</button>
+    <button class="wf-gun-btn">WF QSZ-92G</button>
+    <button class="wf-gun-btn">WF 357 Revolver</button>
+    <button class="wf-gun-btn">WF 93R</button>
+    <button class="wf-gun-btn">WF Desert eagle</button>
+    <button class="wf-gun-btn">WF M1911</button>
+    <button class="back" onclick="showPage('pageWFGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageOperationOptions">
+    <h1>Operation Options</h1>
+    <button class="option-btn guncode" id="opGunCodeBtn">OP Gun Code</button>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageOperationGunCode">
+    <h1>Gun Code Options</h1>
+    <button class="op-gun-btn lowbudget" id="lowBudgetBtn">Low Budget</button>
+    <button class="op-gun-btn highperf" id="highPerfBtn">High Performance</button>
+    <button class="back" onclick="showPage('pageOperationOptions')">Back</button>
+</div>
+
+<div class="page" id="pageLowBudget">
+    <h1>Low Budget Guns</h1>
+    <button class="lb-gun-btn">R93 Sniper Rifle</button>
+    <button class="lb-gun-btn">SG552 Assault Rifle</button>
+    <button class="lb-gun-btn">QBZ95 - 1 Assault Rifle</button>
+    <button class="lb-gun-btn">P90 Submachine Gun</button>
+    <button class="lb-gun-btn">M249 Light Machine Gun</button>
+    <button class="back" onclick="showPage('pageOperationGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageAWM">
+    <h1>High Performance Gun</h1>
+    <button class="awm-btn">AWM</button>
+    <button class="m7-btn" id="m7Btn">M7 Battle Rifle</button>
+    <button class="awm-btn" id="vectorBtn">Vector Submachine Gun</button>
+    <button class="awm-btn" id="m250Btn">M250 General Machine Gun</button>
+    <button class="awm-btn" id="sr25Btn">SR-25 Marksman Rifle</button>
+    <button class="back" onclick="showPage('pageOperationGunCode')">Back</button>
+</div>
+
+<div class="page" id="pageM7">
+    <h1>M7 Battle Rifle Code</h1>
+    <div class="code-display">Operations-6IM79H409VCP4B2HUR6HP</div>
+    <button class="back" onclick="showPage('pageAWM')">Back</button>
+</div>
+
+<div class="page" id="pageSettings">
+    <h1>Settings</h1>
+    <ol class="settings-list">
+        <li id="openThemes">Themes</li>
+        <li id="openLinks">Our links</li>
+        <li id="openAbout">About</li>
+        <li onclick="window.location.href='mailto:Chanchalapiyum@gmail.com'">Feedback</li>
+        <li id="openCustom">Custom page</li> </ol>
+    <button class="back" onclick="showPage('pageMode')">Back</button>
+</div>
+
+<div class="page" id="pageCustom">
+    <h1>Custom Page</h1>
+    <div class="updates-text">Welcome to your Custom Page.</div>
+    <button class="back" onclick="showPage('pageSettings')">Back</button>
+</div>
+
+<div class="page" id="pageThemes">
+    <h1>Themes</h1>
+    <button class="theme-btn light" onclick="setLight()">Light Mode</button>
+    <button class="theme-btn dark" onclick="setDark()">Dark Mode</button>
+    <button class="back" onclick="showPage('pageSettings')">Back</button>
+</div>
+
+<div class="page" id="pageLinks">
+    <h1>Our Links</h1>
+    <button class="link-btn" onclick="window.open('https://www.tiktok.com/@dfbatayo','_blank')">Our TikTok Page</button>
+    <button class="link-btn whatsapp" onclick="window.open('https://whatsapp.com/channel/0029Vb6igyZBKfhvd4oqwo0O','_blank')">Our WhatsApp Channel</button>
+    <button class="back" onclick="showPage('pageSettings')">Back</button>
+</div>
+
+<div class="page" id="pageAbout">
+    <h1>About</h1>
+    <div class="about-text">
+        DF BATAYO Tiktok Page එක මගින් ඔබ වෙත ගෙන එන මෙම යෙදුම තවමත් වැඩිදියුණු කරමින් පවති. අප ඉදිරියේදි මෙය තවත් ඔබට ප්‍රයෝජනවත් වන ලෙස වැඩිදියුණු කර ගෙන එන්නෙමු. එතෙක් අප සමඟ රැඳි සිටින ඔබට ස්තූති.<br><br>
+        <b>@chamal & chanchala</b>
+    </div>
+    <button class="back" onclick="showPage('pageSettings')">Back</button>
+</div>
+
+<script>
+const goBtn = document.getElementById('goBtn');
+const openSettings = document.getElementById('openSettings');
+const openThemes = document.getElementById('openThemes');
+const openLinks = document.getElementById('openLinks');
+const openAbout = document.getElementById('openAbout');
+const openCustom = document.getElementById('openCustom');
+const gunTipsBtn = document.getElementById('gunTipsBtn');
+const btnWarfare = document.getElementById('btnWarfare');
+const btnOperation = document.getElementById('btnOperation');
+const wfGunCodeBtn = document.getElementById('wfGunCodeBtn');
+const opGunCodeBtn = document.getElementById('opGunCodeBtn');
+const newGame = document.getElementById('newGame');
+const topUp = document.getElementById('topUp');
+
+function showPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    
+    const topNav = document.getElementById('topNav');
+    if(id === "pageMode") {
+        topNav.style.display = "flex";
+    } else {
+        topNav.style.display = "none";
+    }
+}
+
+function handleSearch(event) {
+    if (event.key === "Enter") {
+        let input = document.getElementById('gunSearch').value.toUpperCase().trim();
+        if(input === "") return;
+
+        let allGunButtons = document.querySelectorAll('.wf-gun-btn, .lb-gun-btn, .awm-btn, .m7-btn');
+        let found = false;
+
+        allGunButtons.forEach(btn => {
+            if (btn.innerText.toUpperCase().includes(input)) {
+                let parentPageId = btn.parentElement.id;
+                showPage(parentPageId);
+                
+                btn.style.boxShadow = "0 0 25px yellow";
+                btn.style.border = "2px solid yellow";
+                btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                setTimeout(() => {
+                    btn.style.boxShadow = "";
+                    btn.style.border = "";
+                }, 3000);
+
+                found = true;
+                document.getElementById('gunSearch').value = ""; 
+            }
+        });
+
+        if(!found) {
+            alert("Gun not found! Please check the name.");
+        }
+    }
+}
+
+goBtn.onclick=()=>showPage("pageMode");
+openSettings.onclick=()=>showPage("pageSettings");
+openThemes.onclick=()=>showPage("pageThemes");
+openLinks.onclick=()=>showPage("pageLinks");
+openAbout.onclick=()=>showPage("pageAbout");
+openCustom.onclick=()=>showPage("pageCustom");
+gunTipsBtn.onclick=()=>showPage("pageGunTips");
+btnWarfare.onclick=()=>showPage("pageWarfareOptions");
+btnOperation.onclick=()=>showPage("pageOperationOptions");
+wfGunCodeBtn.onclick=()=>showPage("pageWFGunCode");
+opGunCodeBtn.onclick=()=>showPage("pageOperationGunCode");
+newGame.onclick=()=>showPage("pageUpdates");
+topUp.onclick=()=>showPage("pageUpdates");
+
+const operatorsBtn = document.getElementById('operatorsBtn');
+if(operatorsBtn) { operatorsBtn.onclick = () => showPage("pageOperators"); }
+const wfRifleBtn = document.getElementById('wfRifleBtn');
+if(wfRifleBtn) { wfRifleBtn.onclick = () => showPage("pageWFRifleGuns"); }
+const wfSMGBtn = document.getElementById('wfSMGBtn');
+if(wfSMGBtn) { wfSMGBtn.onclick = () => showPage("pageWFSMGGuns"); }
+const wfSpecialBtn = document.getElementById('wfSpecialBtn');
+if(wfSpecialBtn) { wfSpecialBtn.onclick = () => showPage("pageWFSpecialGuns"); }
+const wfSRBtn = document.getElementById('wfSRBtn');
+if(wfSRBtn) { wfSRBtn.onclick = () => showPage("pageWFSRGuns"); }
+const wfLMGBtn = document.getElementById('wfLMGBtn');
+if(wfLMGBtn) { wfLMGBtn.onclick = () => showPage("pageWFLMGGuns"); }
+const wfShotgunBtn = document.getElementById('wfShotgunBtn');
+if(wfShotgunBtn) { wfShotgunBtn.onclick = () => showPage("pageWFShotgunGuns"); }
+const wfMRBtn = document.getElementById('wfMRBtn');
+if(wfMRBtn) { wfMRBtn.onclick = () => showPage("pageWFMRGuns"); }
+const wfPistolBtn = document.getElementById('wfPistolBtn');
+if(wfPistolBtn) { wfPistolBtn.onclick = () => showPage("pageWFPistolGuns"); }
+const lowBudgetBtn = document.getElementById('lowBudgetBtn');
+if(lowBudgetBtn) { lowBudgetBtn.onclick = () => showPage("pageLowBudget"); }
+const highPerfBtn = document.getElementById('highPerfBtn');
+if(highPerfBtn) { highPerfBtn.onclick = () => showPage("pageAWM"); }
+const m7Btn = document.getElementById('m7Btn');
+if(m7Btn) { m7Btn.onclick = () => showPage("pageM7"); }
+
+if(localStorage.getItem("theme")==="dark"){ setDark(); } else { setLight(); }
+function setDark(){ document.body.classList.add("dark"); localStorage.setItem("theme","dark"); }
+function setLight(){ document.body.classList.remove("dark"); localStorage.setItem("theme","light"); }
+</script>
+
+</body>
+</html>
